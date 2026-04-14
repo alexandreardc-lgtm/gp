@@ -348,10 +348,10 @@ def init_db():
             db.session.commit()
             print("✅ 40 Lojas BK criadas no Banco!")
 
+init_db()
+scheduler.init_app(app)
+scheduler.start()
+
 if __name__ == '__main__':
-    init_db()
-    scheduler.init_app(app)
-    scheduler.start()
-    
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
