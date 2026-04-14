@@ -27,8 +27,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 scheduler = APScheduler()
 
-db = SQLAlchemy(app)
-scheduler = APScheduler()
 
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 465
