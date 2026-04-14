@@ -1,5 +1,6 @@
 Flask
-Flask-SQLAlchemy
 Flask-Cors
-gunicorn
+Flask-SQLAlchemy
+Flask-APScheduler
 psycopg2-binary
+gunicorn
