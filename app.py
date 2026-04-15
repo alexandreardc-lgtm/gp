@@ -27,7 +27,7 @@ db = SQLAlchemy(app)
 scheduler = APScheduler()
 
 resend.api_key = os.getenv("RESEND_API_KEY") 
-EMAIL_REMETENTE_RESEND = "alertas@gprocess.com.br"
+EMAIL_REMETENTE_RESEND = "onboarding@resend.dev"
 EMAIL_GESTOR = "alexandre.ardc@gmail.com"
 
 
