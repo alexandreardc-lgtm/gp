@@ -27,7 +27,7 @@ db = SQLAlchemy(app)
 scheduler = APScheduler()
 
 resend.api_key = os.getenv("RESEND_API_KEY") 
-EMAIL_REMETENTE_RESEND = "onboarding@resend.dev"
+EMAIL_REMETENTE_RESEND = "alertas@gprocess.com.br"
 EMAIL_GESTOR = "alexandre.ardc@gmail.com"
 
 
@@ -120,16 +120,11 @@ def registrar_log(usuario_nome, modulo, acao):
 
 def enviar_alerta_sla(chamado_id, tecnico, descricao):
     try:
-        conteudo = f"""
-        ALERTA GPROCESS
-        
-        O chamado #{chamado_id} do técnico {tecnico} ultrapassou o SLA de 4 dias.
-        Descrição: {descricao}
-        """
+        conteudo = f"ALERTA GPROCESS\nO chamado #{chamado_id} do técnico {tecnico} ultrapassou o SLA de 4 dias.\nDescrição: {descricao}"
         
         r = resend.Emails.send({
-            "from": f"GProcess <{EMAIL_REMETENTE_RESEND}>",
-            "to": [EMAIL_GESTOR],
+            "from": f"GProcess <{EMAIL_REMETENTE_RESEND}>", 
+            "to": [EMAIL_GESTOR], # Mantém a lista com os colchetes
             "subject": f"🚨 URGENTE: SLA Vencido - Chamado #{chamado_id}",
             "text": conteudo
         })
