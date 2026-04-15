@@ -336,10 +336,9 @@ def editar_loja(id):
 # INICIALIZAÇÃO
 # ===============
 def init_db():
-    enviar_alerta_sla("TESTE", "Alexandre", "Teste de envio imediato") # ala teste 
     with app.app_context():
         db.create_all()
-        # Injeção inicial de Usuários
+        
         if not Usuario.query.first():
             tecs = ["Alexandre", "Carlos Cesar", "Everton", "Ludier", "Saulo", "Sandro", "Marcos", "Wesley"]
             for t in tecs:
@@ -348,7 +347,6 @@ def init_db():
             db.session.commit()
             print("✅ Técnicos e Admin criados no Banco!")
 
-        # Injeção inicial de Lojas
         if not Loja.query.first():
             lojas = ["BK10 LARGO TREZE", "BK11 POLO SHOPPING", "BK12 PRAÇA DA MOÇA", "BK13 SHOPPING LIGHT", "BK15 MOOCA", "BK16 JK IGUATEMI", "BK18 THE SQUARE", "BK20 SÃO BERNARDO DO CAMPO", "BK21 LIMEIRA", "BK22 ITU", "BK23 GOLDEN SQUARE", "BK24 BONSUCESSO", "BK27 JARAGUÁ", "BK28 TAUBATÉ", "BK30 ITAQUERA", "BK31 SHOPPING MAIA", "BK32 TAUBATÉ DRIVE", "BK34 LIBERDADE", "BK37 INTERNACIONAL", "BK40 BRAGANÇA PAULISTA", "BK44 25 DE MARÇO", "BK45 SÃO CAETANO DO SUL", "BK50 CONSELHEIRO", "BK52 SÃO MIGUEL DRIVE", "BK54 ANDORINHA", "BK56 JOÃO DIAS DRIVE", "BK57 ATIBAIA DRIVE", "BK62 DIADEMA DRIVE", "BK63 PEDROSO DE MORAIS", "BK66 ITAQUERA NOVA EXTENSÃO", "BK67 JOSÉ MARIA WHITAKER", "BK69 CERRO CORÁ", "BK70 AUGUSTA", "BK76 ANGÉLICA", "BK81 INTERNACIONAL 2", "BK91 TABOÃO DRIVE", "BK95 CENTRAL PARK", "BK96 PASEO ALTO DAS NAÇOES", "BK97 KIZAEMON", "BK98 BANDEIRANTES"]
             for l in lojas:
