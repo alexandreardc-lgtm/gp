@@ -1,8 +1,7 @@
 import os
+import resend
 import sqlite3
 import datetime
-import smtplib
-from email.mime.text import MIMEText
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
@@ -27,12 +26,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 scheduler = APScheduler()
 
-
-SMTP_SERVER = "smtp.gmail.com"
-SMTP_PORT = 465
-EMAIL_REMETENTE = "alexandre.ardc@gmail.com" 
-EMAIL_SENHA = "xcroiqurgjgocqhe" 
+resend.api_key = os.getenv("RESEND_API_KEY") 
+EMAIL_REMETENTE_RESEND = "onboarding@resend.dev"
 EMAIL_GESTOR = "suporte@gprocess.com.br"
+# EMAIL_REMETENTE = "alexandre.ardc@gmail.com" 
+
 
 # ==========================================
 # 1. MODELOS DE DADOS
@@ -119,24 +117,26 @@ def registrar_log(usuario_nome, modulo, acao):
 # 2. ROBÔ DE SLA
 # =================
 
+
 def enviar_alerta_sla(chamado_id, tecnico, descricao):
     try:
-        conteudo = f"ALERTA GPROCESS\n\nO chamado #{chamado_id} do técnico {tecnico} ultrapassou o SLA de 4 dias.\nDescrição: {descricao}"
-        msg = MIMEText(conteudo)
-        msg['Subject'] = f'🚨 URGENTE: SLA Vencido - Chamado #{chamado_id}'
-        msg['From'] = EMAIL_REMETENTE
-        msg['To'] = EMAIL_GESTOR
-
-        # Usando a porta 587 com STARTTLS
-        server = smtplib.SMTP("smtp.gmail.com", 587)
-        server.starttls() 
-        server.login(EMAIL_REMETENTE, EMAIL_SENHA)
-        server.send_message(msg)
-        server.quit()
+        conteudo = f"""
+        ALERTA GPROCESS
         
-        print(f"📧 E-mail de alerta enviado para {EMAIL_GESTOR}")
+        O chamado #{chamado_id} do técnico {tecnico} ultrapassou o SLA de 4 dias.
+        Descrição: {descricao}
+        """
+        
+        r = resend.Emails.send({
+            "from": f"GProcess <{EMAIL_REMETENTE_RESEND}>",
+            "to": [EMAIL_GESTOR],
+            "subject": f"🚨 URGENTE: SLA Vencido - Chamado #{chamado_id}",
+            "text": conteudo
+        })
+        
+        print(f"📧 E-mail de alerta enviado via Resend! ID: {r.get('id')}")
     except Exception as e:
-        print(f"❌ Erro técnico ao enviar e-mail: {e}")
+        print(f"❌ Erro ao enviar via API Resend: {e}")
 
 
 @scheduler.task('interval', id='verificar_sla', hours=1)
