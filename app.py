@@ -32,7 +32,7 @@ SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 465
 EMAIL_REMETENTE = "alexandre.ardc@gmail.com" 
 EMAIL_SENHA = "xcroiqurgjgocqhe" 
-EMAIL_GESTOR = "manoel.marques@gprocess.com.br"
+EMAIL_GESTOR = "suporte@gprocess.com.br"
 
 # ==========================================
 # 1. MODELOS DE DADOS
@@ -151,7 +151,7 @@ def robo_de_cobranca_sla():
 
         for p in pendentes:
             diff = hoje - p.data_hora
-            if diff.days >= 4:
+            if diff.days >= 3:
                 enviar_alerta_sla(p.id, p.usuario, p.acao)
 
 # ========================
@@ -328,7 +328,7 @@ def editar_loja(id):
 # INICIALIZAÇÃO
 # ===============
 def init_db():
-    # enviar_alerta_sla("TESTE", "Alexandre", "Teste de envio imediato")
+    enviar_alerta_sla("TESTE", "Alexandre", "Teste de envio imediato") # ala teste 
     with app.app_context():
         db.create_all()
         # Injeção inicial de Usuários
