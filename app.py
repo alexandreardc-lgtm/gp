@@ -28,7 +28,7 @@ scheduler = APScheduler()
 
 resend.api_key = os.getenv("RESEND_API_KEY") 
 EMAIL_REMETENTE_RESEND = "alertas@gprocess.com.br"
-EMAIL_GESTOR = "alexandre.ardc@gmail.com"
+EMAIL_GESTOR = "suporte@gprocess.com.br" # Ou o e-mail real dos gerentes
 
 
 
