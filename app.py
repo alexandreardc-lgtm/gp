@@ -28,7 +28,13 @@ scheduler = APScheduler()
 
 resend.api_key = os.getenv("RESEND_API_KEY") 
 EMAIL_REMETENTE_RESEND = "alertas@gprocess.com.br"
-EMAIL_GESTOR = "suporte@gprocess.com.br" # Ou o e-mail real dos gerentes
+EMAIL_GESTOR = [
+    "alexandre@gprocess.com.br", 
+    "manoel.marques@gprocess.com.br",
+    "gabriel.zaratim@gprocess.com.br",
+    "jefferson.santos@gprocess.com.br",
+    "alex.gleidson@gprocess.com.br"
+]
 
 
 
@@ -124,7 +130,7 @@ def enviar_alerta_sla(chamado_id, tecnico, descricao):
         
         r = resend.Emails.send({
             "from": f"GProcess <{EMAIL_REMETENTE_RESEND}>", 
-            "to": [EMAIL_GESTOR], # Mantém a lista com os colchetes
+            "to": EMAIL_GESTOR, # Mantém a lista com os colchetes
             "subject": f"🚨 URGENTE: SLA Vencido - Chamado #{chamado_id}",
             "text": conteudo
         })
