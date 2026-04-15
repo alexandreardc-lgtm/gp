@@ -28,8 +28,8 @@ scheduler = APScheduler()
 
 resend.api_key = os.getenv("RESEND_API_KEY") 
 EMAIL_REMETENTE_RESEND = "onboarding@resend.dev"
-EMAIL_GESTOR = "suporte@gprocess.com.br"
-# EMAIL_REMETENTE = "alexandre.ardc@gmail.com" 
+EMAIL_GESTOR = "alexandre.ardc@gmail.com"
+
 
 
 # ==========================================
@@ -250,6 +250,14 @@ def abrir_chamado():
         db.session.rollback()
         print(f"❌ Erro no Python: {e}")
         return jsonify({"status": "erro", "message": str(e)}), 500
+
+@app.route('/testar-email', methods=['GET'])
+def rota_teste_email():
+    try:
+        enviar_alerta_sla("999", "Alexandre (Teste)", "Teste disparado via navegador")
+        return jsonify({"status": "sucesso", "mensagem": "Comando de envio enviado ao Resend!"}), 200
+    except Exception as e:
+        return jsonify({"status": "erro", "mensagem": str(e)}), 500
 
 # =============================
 # 4. ROTAS DE USUÁRIOS (ADMIN)
