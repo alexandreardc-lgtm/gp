@@ -28,13 +28,7 @@ scheduler = APScheduler()
 
 resend.api_key = os.getenv("RESEND_API_KEY") 
 EMAIL_REMETENTE_RESEND = "alertas@gprocess.com.br"
-EMAIL_GESTOR = [
-    "alexandre@gprocess.com.br", 
-    "manoel.marques@gprocess.com.br",
-    "gabriel.zaratim@gprocess.com.br",
-    "jefferson.santos@gprocess.com.br",
-    "alex.gleidson@gprocess.com.br"
-]
+EMAIL_GESTOR = "alexandre.ardc@gmail.com"
 
 
 
@@ -130,7 +124,7 @@ def enviar_alerta_sla(chamado_id, tecnico, descricao):
         
         r = resend.Emails.send({
             "from": f"GProcess <{EMAIL_REMETENTE_RESEND}>", 
-            "to": EMAIL_GESTOR, # Mantém a lista com os colchetes
+            "to": [EMAIL_GESTOR],
             "subject": f"🚨 URGENTE: SLA Vencido - Chamado #{chamado_id}",
             "text": conteudo
         })
@@ -144,15 +138,14 @@ def enviar_alerta_sla(chamado_id, tecnico, descricao):
 def robo_de_cobranca_sla():
     with app.app_context():
         hoje = datetime.datetime.now()
-        pendentes = LogAuditoria.query.filter(
-            LogAuditoria.modulo == "Chamados",
-            LogAuditoria.acao.contains("Abertura OS #"),
-            ~LogAuditoria.acao.contains("CONCLUÍDO")
-        ).all()
-
+        pendentes = LogAuditoria.query.filter(LogAuditoria.modulo == "Chamados", LogAuditoria.acao.contains("Abertura OS #")).all()
+        
         for p in pendentes:
+            if "[CONCLUÍDO]" in p.acao:
+                continue  # Pula se o chamado já foi finalizado
+            
             diff = hoje - p.data_hora
-            if diff.days >= 3:
+            if diff.days >= 4:  # Ajustado para 4 dias de SLA
                 enviar_alerta_sla(p.id, p.usuario, p.acao)
 
 # ========================
